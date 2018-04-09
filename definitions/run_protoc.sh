@@ -5,7 +5,7 @@
 set -e
 
 REPOPATH=`realpath ../build`
-CURRENT_BRANCH=`git symbolic-ref --short HEAD`
+CURRENT_BRANCH=${GIT_LOCAL_BRANCH:-`git symbolic-ref --short HEAD`}
 
 # Helper for adding a directory to the stack and echoing the result
 function enterDir {
@@ -101,7 +101,7 @@ function commitAndPush {
 	if ! git diff --exit-code > /dev/null; then
 		git add .
 		git commit -m "Auto Creation of Proto" -m "Build of protobuf version grpc-services/protobufs@$ref"
-		git push origin HEAD
+		#git push origin HEAD
 	else
 		echo "No changes detected for $1"
 	fi
