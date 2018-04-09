@@ -5,7 +5,7 @@
 set -e
 
 REPOPATH=`realpath ../build`
-CURRENT_BRANCH=${GIT_LOCAL_BRANCH:-`git symbolic-ref --short HEAD`}
+CURRENT_BRANCH=${GIT_LOCAL_BRANCH:-master}
 
 # Helper for adding a directory to the stack and echoing the result
 function enterDir {
