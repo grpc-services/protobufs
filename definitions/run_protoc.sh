@@ -101,7 +101,11 @@ function commitAndPush {
 	if ! git diff --exit-code > /dev/null; then
 		git add .
 		git commit -m "Auto Creation of Proto" -m "Build of protobuf version grpc-services/protobufs@$ref"
-		#git push origin HEAD
+		if [ -z "$DRY_RUN" ]; then
+			git push origin HEAD
+		else
+			echo "Dryrun, not pushing to origin"
+		fi
 	else
 		echo "No changes detected for $1"
 	fi
