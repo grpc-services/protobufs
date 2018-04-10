@@ -50,3 +50,15 @@ message Item {
 		FolderFacet folder = 9;
 	}
 }
+
+message ItemCreatedEvent {
+	Item item = 1;
+}
+
+message ItemRemovedEvent {
+	Item item = 1;
+}
+
+message ItemContentUpdatedEvent {
+	Item item = 1;
+}

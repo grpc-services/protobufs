@@ -20,6 +20,8 @@ service StorageService {
 
 	rpc RemoveDrive(RemoveDriveRequest) returns (RemoveDriveResponse);
 	rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse);
+
+	rpc WatchChanges(WatchChangesRequest) returns (stream WatchChangesResponse);
 }
 
 message GetDriveRequest {
@@ -157,4 +159,16 @@ message RemoveItemRequest {
 }
 
 message RemoveItemResponse {
+}
+
+message WatchChangesRequest {
+	string drive_id = 1;
+}
+
+message WatchChangesResponse {
+	oneof test_event {
+		ItemCreatedEvent created = 1;
+		ItemRemovedEvent removed = 2;
+		ItemContentUpdatedEvent updated = 3;
+	}
 }
