@@ -1,0 +1,52 @@
+syntax = "proto3";
+package grpc_services.storage;
+import "common/Timestamp.proto";
+
+message Hashes {
+	string crc32 = 1;
+	string sha1 = 2;
+	string md5 = 3;
+	string sha512 = 4;
+}
+
+message FolderFacet {
+	uint64 num_items = 1;
+}
+
+message FileFacet {
+	Hashes hashes = 1;
+	string mime_type = 2;
+	AudioFacet audio = 3;
+}
+
+message AudioFacet {
+	// Bitrate in Kbit/s
+	uint64 bitrate = 1;
+	// Duration in milliseconds
+	uint64 duration = 2;
+	// is a vbr track
+	bool is_vbr = 3;
+}
+
+message Drive {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+	common.Timestamp created_time = 4;
+	common.Timestamp last_modified = 5;
+	common.Timestamp last_item_modified = 6;
+}
+
+message Item {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+	common.Timestamp created_time = 4;
+	common.Timestamp last_modified = 5;
+	string parent_id = 6;
+	uint64 size = 7;
+	oneof test_type {
+		FileFacet file = 8;
+		FolderFacet folder = 9;
+	}
+}

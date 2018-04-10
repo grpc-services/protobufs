@@ -1,0 +1,160 @@
+syntax = "proto3";
+package grpc_services.storage;
+import "storage/entities.proto";
+
+service StorageService {
+	rpc GetDrive(GetDriveRequest) returns (GetDriveResponse);
+	rpc GetDrives(GetDrivesRequest) returns (GetDrivesResponse);
+	rpc GetItem(GetItemRequest) returns (GetItemResponse);
+	rpc GetChildren(GetChildrenRequest) returns (GetChildrenResponse);
+	rpc GetContent(GetContentRequest) returns (GetContentResponse);
+	rpc GetContentStream(GetContentStreamRequest) returns (stream GetContentStreamResponse);
+
+	rpc CreateDrive(CreateDriveRequest) returns (CreateDriveResponse);
+	rpc CreateItem(CreateItemRequest) returns (CreateItemResponse);
+	rpc PutContentStream(stream PutContentStreamRequest) returns (PutContentStreamResponse);
+	rpc TruncateContent(TruncateContentRequest) returns (TruncateContentResponse);
+
+	rpc UpdateDrive(UpdateDriveRequest) returns (UpdateDriveResponse);
+	rpc UpdateItem(UpdateItemRequest) returns (UpdateItemResponse);
+
+	rpc RemoveDrive(RemoveDriveRequest) returns (RemoveDriveResponse);
+	rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse);
+}
+
+message GetDriveRequest {
+	string drive_id = 1;
+}
+
+message GetDriveResponse {
+	Drive drive = 1;
+}
+
+message GetDrivesRequest {
+}
+
+message GetDrivesResponse {
+	repeated Drive drives = 1;
+}
+
+message GetItemRequest {
+	string drive_id = 1;
+	string item_id = 2;
+}
+
+message GetItemResponse {
+	Item item = 1;
+}
+
+message GetChildrenRequest {
+	string drive_id = 1;
+	string item_id = 2;
+	uint64 offset = 3;
+	uint64 count = 4;
+}
+
+message GetChildrenResponse {
+	uint64 offset = 1;
+	uint64 total = 2;
+	repeated Item children = 3;
+}
+
+message GetContentRequest {
+	string drive_id = 1;
+	string item_id = 2;
+	uint64 offset = 3;
+	uint64 count = 4;
+}
+
+message GetContentResponse {
+	uint64 offset = 1;
+	uint64 count = 2;
+	uint64 total_size = 3;
+	bytes content = 4;
+}
+
+message GetContentStreamRequest {
+	string drive_id = 1;
+	string item_id = 2;
+	uint64 offset = 3;
+	uint64 count = 4;
+}
+
+message GetContentStreamResponse {
+	uint64 offset = 1;
+	uint64 count = 2;
+	uint64 total_size = 3;
+	bytes content = 4;
+}
+
+message CreateDriveRequest {
+	string name = 1;
+	string description = 2;
+}
+
+message CreateDriveResponse {
+	Drive drive = 1;
+}
+
+message CreateItemRequest {
+	string drive_id = 1;
+	string name = 2;
+	string description = 3;
+	string parent_id = 4;
+}
+
+message CreateItemResponse {
+	Item item = 1;
+}
+
+message PutContentStreamRequest {
+	string drive_id = 1;
+	string item_id = 2;
+	uint64 offset = 3;
+	bytes content = 4;
+}
+
+message PutContentStreamResponse {
+	Item item = 1;
+}
+
+message TruncateContentRequest {
+	string drive_id = 1;
+	string item_id = 2;
+	uint64 new_length = 3;
+}
+
+message TruncateContentResponse {
+	Item item = 1;
+}
+
+message UpdateDriveRequest {
+	Drive drive = 1;
+}
+
+message UpdateDriveResponse {
+	Drive drive = 1;
+}
+
+message UpdateItemRequest {
+	Item item = 1;
+}
+
+message UpdateItemResponse {
+	Item item = 1;
+}
+
+message RemoveDriveRequest {
+	string drive_id = 1;
+}
+
+message RemoveDriveResponse {
+}
+
+message RemoveItemRequest {
+	string drive_id = 1;
+	string item_id = 2;
+}
+
+message RemoveItemResponse {
+}
