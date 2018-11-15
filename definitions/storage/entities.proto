@@ -17,6 +17,7 @@ message FileFacet {
 	Hashes hashes = 1;
 	string mime_type = 2;
 	AudioFacet audio = 3;
+	uint64 size = 4;
 }
 
 message AudioFacet {
@@ -44,10 +45,9 @@ message Item {
 	common.Timestamp created_time = 4;
 	common.Timestamp last_modified = 5;
 	string parent_id = 6;
-	uint64 size = 7;
 	oneof test_type {
-		FileFacet file = 8;
-		FolderFacet folder = 9;
+		FileFacet file = 7;
+		FolderFacet folder = 8;
 	}
 }
 
