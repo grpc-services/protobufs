@@ -2,6 +2,11 @@ syntax = "proto3";
 package grpc_services.storage;
 import "common/Timestamp.proto";
 
+enum ItemType {
+	FILE = 0;
+	FOLDER = 1;
+}
+
 message Hashes {
 	string crc32 = 1;
 	string sha1 = 2;
@@ -45,9 +50,10 @@ message Item {
 	common.Timestamp created_time = 4;
 	common.Timestamp last_modified = 5;
 	string parent_id = 6;
+	ItemType type = 7;
 	oneof test_type {
-		FileFacet file = 7;
-		FolderFacet folder = 8;
+		FileFacet file = 8;
+		FolderFacet folder = 9;
 	}
 }
 

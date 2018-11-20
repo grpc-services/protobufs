@@ -103,6 +103,7 @@ message CreateItemRequest {
 	string name = 2;
 	string description = 3;
 	string parent_id = 4;
+	ItemType type = 5;
 }
 
 message CreateItemResponse {
@@ -139,7 +140,8 @@ message UpdateDriveResponse {
 }
 
 message UpdateItemRequest {
-	Item item = 1;
+	string drive = 1;
+	Item item = 2;
 }
 
 message UpdateItemResponse {
