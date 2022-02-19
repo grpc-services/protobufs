@@ -1,0 +1,31 @@
+name: Validate Protos
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+jobs:
+  protobuf-compile:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        files:
+        - "definitions/**/*.proto"
+    steps:
+      - run: shopt -s globstar
+      - uses: actions/checkout@v2
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          mkdir -p /opt/protoc-gen-lint
+          cd /opt/protoc-gen-lint
+          wget https://github.com/ckaznocha/protoc-gen-lint/releases/download/v0.2.4/protoc-gen-lint_linux_amd64.zip
+          unzip protoc-gen-lint_linux_amd64.zip
+          chmod +x protoc-gen-lint
+          echo "/opt/protoc-gen-lint/" >> $GITHUB_PATH
+      - run: protoc -I=definitions --lint_out=sort_imports:. ${{ matrix.files }}
