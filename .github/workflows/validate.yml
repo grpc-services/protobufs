@@ -20,6 +20,7 @@ jobs:
         uses: arduino/setup-protoc@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install protoc-gen-lint
         run: |
           mkdir -p /opt/protoc-gen-lint
