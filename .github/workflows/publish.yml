@@ -1,0 +1,30 @@
+name: Publish Protos
+on:
+  push:
+    branches: [master]
+    paths:
+    - "definitions/**/*.proto"
+jobs:
+  publish-cpp:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: shopt -s globstar
+      - uses: actions/checkout@v2
+      - name: Install protobuf
+        uses: ./.github/actions/install-protoc
+      - name: Run protobuf cpp generation
+        run: |
+          mkdir cpp
+          protoc --plugin=protoc-gen-grpc=/usr/local/bin/grpc_cpp_plugin -I=definitions --cpp_out=cpp --grpc_out=cpp `find definitions -name "*.proto"`
+      - name: Update protorepo-cpp
+        uses: ./.github/actions/push-to-repo
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY_CPP }}
+        with:
+          source-directory: cpp/
+          destination-github-username: 'grpc-services'
+          destination-repository-name: 'protorepo-cpp'
+          user-email: thalhammer.d@googlemail.com
+          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          target-branch: master
+          target-directory: generated

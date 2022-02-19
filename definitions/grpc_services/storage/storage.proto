@@ -1,6 +1,6 @@
 syntax = "proto3";
 package grpc_services.storage;
-import "storage/entities.proto";
+import "grpc_services/storage/entities.proto";
 
 service StorageService {
 	rpc GetDrive(GetDriveRequest) returns (GetDriveResponse);

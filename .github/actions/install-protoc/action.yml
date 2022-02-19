@@ -1,0 +1,55 @@
+name: Setup protobuf compiler
+description: Download and compile protoc, protoc-gen-grpc and protoc-gen-grpc-web
+inputs:
+  protoc-version:
+    description: The desired Protoc version to install
+    required: false
+    default: "3.19.4"
+  grpc-version:
+    description: The desired Protoc version to install
+    required: false
+    default: "1.44.0"
+runs:
+  using: composite
+  steps:
+    - name: Cache Protoc
+      id: cache-protoc
+      uses: actions/cache@v2
+      with:
+        path: /tmp/protoc
+        key: ${{ runner.os }}-protoc-${{ inputs.protoc-version }}
+    - shell: bash
+      if: steps.cache-protoc.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p /tmp/protoc
+        cd /tmp/protoc
+        wget https://github.com/protocolbuffers/protobuf/releases/download/v${{ inputs.protoc-version }}/protoc-${{ inputs.protoc-version }}-linux-x86_64.zip
+        unzip protoc-${{ inputs.protoc-version }}-linux-x86_64.zip
+    - shell: bash
+      run: echo "/tmp/protoc/bin" >> $GITHUB_PATH
+    - name: Cache gRPC
+      id: cache-grpc
+      uses: actions/cache@v2
+      with:
+        path: /tmp/protoc-grpc
+        key: ${{ runner.os }}-grpc-${{ inputs.grpc-version }}
+    - uses: jwlawson/actions-setup-cmake@v1.12
+      with:
+        cmake-version: '3.22.x'
+    - shell: bash
+      if: steps.cache-grpc.outputs.cache-hit != 'true'
+      run: |
+        sudo apt install -y build-essential autoconf libtool pkg-config
+        mkdir -p /tmp/protoc-grpc
+        cd /tmp/protoc-grpc
+        git clone --recurse-submodules --depth 1 -b v${{ inputs.grpc-version }} https://github.com/grpc/grpc
+        mkdir -p build
+        cd build
+        cmake -DgRPC_INSTALL=ON -DgRPC_BUILD_TESTS=OFF ../grpc
+        make -j `nproc`
+    - shell: bash
+      run: |
+        sudo apt install -y build-essential
+        cd /tmp/protoc-grpc/build
+        sudo make install
+

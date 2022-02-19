@@ -1,6 +1,6 @@
 syntax = "proto3";
 package grpc_services.storage;
-import "common/Timestamp.proto";
+import "grpc_services/common/Timestamp.proto";
 
 enum ItemType {
 	FILE = 0;
